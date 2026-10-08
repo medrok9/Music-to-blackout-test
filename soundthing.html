@@ -24,8 +24,7 @@
 </div>
 
 
-<button onclick="document.getElementById('myAudio').play()">Play music
-</button>
+<button onclick="document.getElementById('myAudio').volume = volSlider.value / 100; document.getElementById('myAudio').play()">Play music</button>
 
 <button onclick="playSoloTrack('myAudio2')">Play blackout sound (Stops Others)</button>
 
@@ -54,32 +53,48 @@
     
     
     <script>
-window.addEventListener("DOMContentLoaded", () => {
-    const slider = document.getElementById("volSlider");
-    const numberInput = document.getElementById("volInput");
-    const audios = document.querySelectorAll("audio");
+const slider = document.getElementById("volSlider");
+const numberInput = document.getElementById("volInput");
 
-    function setVolume(value) {
-        value = Math.max(0, Math.min(100, Number(value) || 0));
+function setVolume() {
+    let volume = Number(slider.value) / 100;
 
-        slider.value = value;
-        numberInput.value = value;
+    document.getElementById("myAudio").volume = volume;
+    document.getElementById("myAudio2").volume = volume;
 
-        audios.forEach(audio => {
-            audio.volume = value / 100;
-        });
+    numberInput.value = slider.value;
+}
+
+slider.oninput = setVolume;
+
+numberInput.oninput = function () {
+    let value = Number(this.value);
+
+    if (value < 0) value = 0;
+    if (value > 100) value = 100;
+    if (isNaN(value)) value = 0;
+
+    slider.value = value;
+    setVolume();
+};
+
+function playSoloTrack(targetAudioId) {
+    const allAudios = document.querySelectorAll("audio");
+
+    allAudios.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+
+    const currentTrack = document.getElementById(targetAudioId);
+
+    if (currentTrack) {
+        currentTrack.volume = Number(slider.value) / 100;
+        currentTrack.play();
     }
+}
 
-    slider.addEventListener("input", () => {
-        setVolume(slider.value);
-    });
-
-    numberInput.addEventListener("input", () => {
-        setVolume(numberInput.value);
-    });
-
-    setVolume(50);
-});
+setVolume();
 </script>
     
     
