@@ -54,36 +54,32 @@
     
     
     <script>
-const slider = document.getElementById('volSlider');
-const numberInput = document.getElementById('volInput');
-const audios = document.querySelectorAll('audio');
+window.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("volSlider");
+    const numberInput = document.getElementById("volInput");
+    const audios = document.querySelectorAll("audio");
 
-function adjustAudioVolume(volumePercent) {
-    const decimalVolume = volumePercent / 100;
+    function setVolume(value) {
+        value = Math.max(0, Math.min(100, Number(value) || 0));
 
-    audios.forEach(audio => {
-        audio.volume = decimalVolume;
+        slider.value = value;
+        numberInput.value = value;
+
+        audios.forEach(audio => {
+            audio.volume = value / 100;
+        });
+    }
+
+    slider.addEventListener("input", () => {
+        setVolume(slider.value);
     });
-}
 
-slider.addEventListener('input', (e) => {
-    numberInput.value = e.target.value;
-    adjustAudioVolume(e.target.value);
+    numberInput.addEventListener("input", () => {
+        setVolume(numberInput.value);
+    });
+
+    setVolume(50);
 });
-
-numberInput.addEventListener('input', (e) => {
-    let value = parseInt(e.target.value);
-
-    if (isNaN(value)) value = 0;
-    if (value < 0) value = 0;
-    if (value > 100) value = 100;
-
-    numberInput.value = value;
-    slider.value = value;
-    adjustAudioVolume(value);
-});
-
-adjustAudioVolume(slider.value);
 </script>
     
     
