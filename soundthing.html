@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>basic ahh music thing</title>
+</head>
+<body>
+<h1>basic ahh music to blackout thing</h1>
+<p>input test notes here for volume and such</p>
+
+<audio id="myAudio" src="song.mp3"></audio>
+<audio id="myAudio2" src="blackout.mp3"></audio>
+
+
+<div class="volume-container">
+    <span class="volume-label">Volume:</span>
+    
+    
+    <input type="range" id="volSlider" class="volume-slider" min="0" max="100" value="50">
+    
+
+    <input type="number" id="volInput" class="volume-input" min="0" max="100" value="50">
+    
+    <span class="volume-label">%</span>
+</div>
+
+
+<button onclick="document.getElementById('myAudio').play()">Play music
+</button>
+
+<button onclick="playSoloTrack('myAudio2')">Play blackout sound (Stops Others)</button>
+
+
+
+<script>
+        function playSoloTrack(targetAudioId) {
+          
+            const allAudios = document.querySelectorAll('audio');
+            
+
+            allAudios.forEach(audio => {
+                audio.pause();          
+                audio.currentTime = 0;  
+            });
+
+            const currentTrack = document.getElementById(targetAudioId);
+            if (currentTrack) {
+                currentTrack.play(); 
+            }
+        }
+    </script>
+    
+    
+    
+    
+    
+    <script>
+    const slider = document.getElementById('volSlider');
+    const numberInput = document.getElementById('volInput');
+
+    slider.addEventListener('input', (e) => {
+        numberInput.value = e.target.value;
+        adjustAudioVolume(e.target.value);
+    });
+
+    numberInput.addEventListener('input', (e) => {
+        let value = parseInt(e.target.value);
+        
+        if (isNaN(value) || value < 0) value = 0;
+        if (value > 100) value = 100;
+        
+        slider.value = value;
+        adjustAudioVolume(value);
+    });
+
+    
+    function adjustAudioVolume(volumePercent) {
+        const decimalVolume = volumePercent / 100;
+        console.log(`Audio volume set to: ${decimalVolume}`);
+    }
+</script>
+    
+    
+    
+    <style>
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: sans-serif;
+            background: #f4f4f9;
+            padding: 15px;
+            border-radius: 8px;
+            width: max-content;
+        }
+
+        .volume-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .volume-slider {
+            width: 200px;
+            cursor: pointer;
+        }
+
+        
+        .volume-input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+     
+        .volume-input::-webkit-inner-spin-button,
+        .volume-input::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+    </style>
+    
+    
+    
+    <!-- shit ahh dark mode lol -->
+    <style>
+  :root {
+    
+    color-scheme: light dark; 
+
+  
+    --bg-color: light-dark(#ffffff, #121212);
+    --text-color: light-dark(#333333, #f0f0f0);
+    --accent-color: light-dark(#0066cc, #4da6ff);
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: system-ui, sans-serif;
+    padding: 2rem;
+
+    transition: background-color 0.3s ease, color 0.3s ease; 
+  }
+
+  a {
+    color: var(--accent-color);
+  }
+</style>
+
+
+
+
+</body>
+</html>
+
+
